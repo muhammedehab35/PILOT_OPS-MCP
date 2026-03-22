@@ -1,0 +1,59 @@
+groups:
+  - name: demo-app-alerts
+    interval: 15s
+    rules:
+
+      - alert: HighCPUUsage
+        expr: demo_cpu_usage_percent > 80
+        for: 30s
+        labels:
+          severity: critical
+          service: payments-api
+          host: prod-server-01
+        annotations:
+          summary: "High CPU usage on prod-server-01"
+          description: "CPU usage is {{ printf \"%.1f\" $value }}% (threshold: 80%) on payments-api."
+
+      - alert: HighMemoryUsage
+        expr: demo_memory_usage_percent > 85
+        for: 30s
+        labels:
+          severity: critical
+          service: payments-api
+          host: prod-server-01
+        annotations:
+          summary: "Memory pressure on prod-server-01"
+          description: "Memory usage is {{ printf \"%.1f\" $value }}% (threshold: 85%) — possible memory leak."
+
+      - alert: HighErrorRate
+        expr: rate(demo_http_requests_total{status="error"}[1m]) > 0.5
+        for: 30s
+        labels:
+          severity: warning
+          service: payments-api
+          host: prod-server-01
+        annotations:
+          summary: "High HTTP error rate on payments-api"
+          description: "Error rate is {{ printf \"%.2f\" $value }} req/s — service is degraded."
+
+      - alert: SlowResponseTime
+        expr: demo_response_time_seconds > 2.0
+        for: 30s
+        labels:
+          severity: warning
+          service: payments-api
+          host: prod-server-01
+        annotations:
+          summary: "High latency on payments-api"
+          description: "Response time is {{ printf \"%.2f\" $value }}s (threshold: 2s)."
+
+      - alert: ServiceDown
+        expr: up{job="demo-app"} == 0
+        for: 15s
+        labels:
+          severity: critical
+          service: payments-api
+          host: prod-server-01
+        annotations:
+          summary: "payments-api is DOWN"
+          description: "Service payments-api has been unreachable for more than 15 seconds."
