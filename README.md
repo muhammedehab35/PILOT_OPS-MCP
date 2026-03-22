@@ -379,4 +379,4 @@ GitHub: [@muhammedehab35](https://github.com/muhammedehab35)
 
 ## License
 
-MIT © 2024 Ehab Muhammed
+MIT © 2026 Ehab Muhammed
